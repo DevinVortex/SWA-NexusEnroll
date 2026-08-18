@@ -1,30 +1,11 @@
 {
   "version": 3,
   "targets": {
-    "net8.0": {
-      "NexusEnroll.Core/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v8.0",
-        "compile": {
-          "bin/placeholder/NexusEnroll.Core.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/NexusEnroll.Core.dll": {}
-        }
-      }
-    }
+    "net8.0": {}
   },
-  "libraries": {
-    "NexusEnroll.Core/1.0.0": {
-      "type": "project",
-      "path": "../NexusEnroll.Core/NexusEnroll.Core.csproj",
-      "msbuildProject": "../NexusEnroll.Core/NexusEnroll.Core.csproj"
-    }
-  },
+  "libraries": {},
   "projectFileDependencyGroups": {
-    "net8.0": [
-      "NexusEnroll.Core >= 1.0.0"
-    ]
+    "net8.0": []
   },
   "packageFolders": {
     "/home/devin-gamage/.nuget/packages/": {}
@@ -32,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Console/NexusEnroll.Console.csproj",
-      "projectName": "NexusEnroll.Console",
-      "projectPath": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Console/NexusEnroll.Console.csproj",
+      "projectUniqueName": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Core/NexusEnroll.Core.csproj",
+      "projectName": "NexusEnroll.Core",
+      "projectPath": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Core/NexusEnroll.Core.csproj",
       "packagesPath": "/home/devin-gamage/.nuget/packages/",
-      "outputPath": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Console/obj/",
+      "outputPath": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Core/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/devin-gamage/.nuget/NuGet/NuGet.Config"
@@ -50,11 +31,7 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {
-            "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Core/NexusEnroll.Core.csproj": {
-              "projectPath": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Core/NexusEnroll.Core.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {
