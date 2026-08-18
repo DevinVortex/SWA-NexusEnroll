@@ -10,3 +10,15 @@
 /home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Core/obj/Debug/net8.0/refint/NexusEnroll.Core.dll
 /home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Core/obj/Debug/net8.0/NexusEnroll.Core.pdb
 /home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Core/obj/Debug/net8.0/ref/NexusEnroll.Core.dll
+/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Core/obj/Debug/net8.0/NexusEnroll.Core.GeneratedMSBuildEditorConfig.editorconfig
+/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Core/obj/Debug/net8.0/NexusEnroll.Core.AssemblyInfoInputs.cache
+/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Core/obj/Debug/net8.0/NexusEnroll.Core.AssemblyInfo.cs
+/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Core/obj/Debug/net8.0/NexusEnroll.Core.csproj.CoreCompileInputs.cache
+/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Core/obj/Debug/net8.0/NexusEnroll.Core.sourcelink.json
+/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Core/obj/Debug/net8.0/NexusEnroll.Core.dll
+/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Core/obj/Debug/net8.0/refint/NexusEnroll.Core.dll
+/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Core/obj/Debug/net8.0/NexusEnroll.Core.pdb
+/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Core/bin/Debug/net8.0/NexusEnroll.Core.deps.json
+/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Core/bin/Debug/net8.0/NexusEnroll.Core.dll
+/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Core/bin/Debug/net8.0/NexusEnroll.Core.pdb
+/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Core/obj/Debug/net8.0/ref/NexusEnroll.Core.dll

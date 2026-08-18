@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Console/NexusEnroll.Console.csproj": {}
+    "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Console/NexusEnroll.Console.csproj": {}
   },
   "projects": {
-    "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Console/NexusEnroll.Console.csproj": {
+    "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Console/NexusEnroll.Console.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Console/NexusEnroll.Console.csproj",
+        "projectUniqueName": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Console/NexusEnroll.Console.csproj",
         "projectName": "NexusEnroll.Console",
-        "projectPath": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Console/NexusEnroll.Console.csproj",
+        "projectPath": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Console/NexusEnroll.Console.csproj",
         "packagesPath": "/home/devin-gamage/.nuget/packages/",
-        "outputPath": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Console/obj/",
+        "outputPath": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Console/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/devin-gamage/.nuget/NuGet/NuGet.Config"
@@ -26,8 +26,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Core/NexusEnroll.Core.csproj": {
-                "projectPath": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Core/NexusEnroll.Core.csproj"
+              "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Core/NexusEnroll.Core.csproj": {
+                "projectPath": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Core/NexusEnroll.Core.csproj"
               }
             }
           }
@@ -66,14 +66,14 @@
         }
       }
     },
-    "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Core/NexusEnroll.Core.csproj": {
+    "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Core/NexusEnroll.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Core/NexusEnroll.Core.csproj",
+        "projectUniqueName": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Core/NexusEnroll.Core.csproj",
         "projectName": "NexusEnroll.Core",
-        "projectPath": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Core/NexusEnroll.Core.csproj",
+        "projectPath": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Core/NexusEnroll.Core.csproj",
         "packagesPath": "/home/devin-gamage/.nuget/packages/",
-        "outputPath": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Core/obj/",
+        "outputPath": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Core/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/devin-gamage/.nuget/NuGet/NuGet.Config"

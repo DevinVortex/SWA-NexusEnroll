@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Core/NexusEnroll.Core.csproj",
+      "projectUniqueName": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Core/NexusEnroll.Core.csproj",
       "projectName": "NexusEnroll.Core",
-      "projectPath": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Core/NexusEnroll.Core.csproj",
+      "projectPath": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Core/NexusEnroll.Core.csproj",
       "packagesPath": "/home/devin-gamage/.nuget/packages/",
-      "outputPath": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll_Submission/NexusEnroll.Core/obj/",
+      "outputPath": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Core/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/devin-gamage/.nuget/NuGet/NuGet.Config"

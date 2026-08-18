@@ -1,4 +1,7 @@
-﻿using NexusEnroll.Core.Entities;
+﻿using NexusEnroll.Core.Data.Admin;
+using NexusEnroll.Core.Data.Catalogue;
+using NexusEnroll.Core.Data.Student;
+using NexusEnroll.Core.Entities;
 using NexusEnroll.Core.Interfaces;
 using NexusEnroll.Core.Patterns.Facade;
 using NexusEnroll.Core.Patterns.Factory;
@@ -49,14 +52,14 @@ internal static class Program
         // --- Core services (the engine + the facade) ---
         var enrollmentService = new EnrollmentService(validationRules, publisher);
 
-        // Mock data stores. The Facade keeps references to these lists, so the
-        // students/courses/administrators added during the Data Mocking phase
-        // below are visible to it.
-        var students = new List<Student>();
-        var courses = new List<Course>();
-        var administrators = new List<Administrator>();
+        // Data-tier repositories simulating the Database-per-Service microservices
+        // pattern. The Facade depends on these interfaces via constructor injection,
+        // so the mock data added during the Data Mocking phase is visible to it.
+        var studentRepository = new InMemoryStudentRepository();
+        var courseRepository = new InMemoryCourseRepository();
+        var adminRepository = new InMemoryAdminRepository();
 
-        var facade = new EnrollmentFacade(enrollmentService, students, courses, administrators);
+        var facade = new EnrollmentFacade(enrollmentService, studentRepository, courseRepository, adminRepository);
 
         /*
          * DATA MOCKING PHASE
@@ -100,11 +103,11 @@ internal static class Program
         // --- Administrator module mock ---
         var adminAlpha = new Administrator("admin-01", "Admin Alpha");
 
-        students.Add(studentA);
-        students.Add(studentB);
-        courses.Add(advancedArchitecture);
-        courses.Add(cloudComputing);
-        administrators.Add(adminAlpha);
+        studentRepository.AddStudent(studentA);
+        studentRepository.AddStudent(studentB);
+        courseRepository.AddCourse(advancedArchitecture);
+        courseRepository.AddCourse(cloudComputing);
+        adminRepository.AddAdmin(adminAlpha);
 
         Console.WriteLine($"Faculty : {faculty.Name} ({faculty.FacultyId})");
         Console.WriteLine($"Course  : {advancedArchitecture.Name} ({advancedArchitecture.CourseId}) - Capacity {advancedArchitecture.Capacity}");
@@ -198,7 +201,7 @@ internal static class Program
 
         // Student A browses the catalogue and checks their current schedule.
         Console.WriteLine($">> {studentA.Name} browses the course catalogue...");
-        List<Course> browseResult = studentA.BrowseCatalogue(c => c.Capacity > 0, courses);
+        List<Course> browseResult = studentA.BrowseCatalogue(c => c.Capacity > 0, courseRepository.GetAllCourses());
         foreach (Course c in browseResult)
         {
             Console.WriteLine($"   - {c.Name} ({c.CourseId}) - {c.EnrolledCount}/{c.Capacity} seats taken");
@@ -266,7 +269,7 @@ internal static class Program
         Console.WriteLine();
 
         var crashCourse = new Course("CS-500", "Transaction Lab", "Demonstrates atomic enrollment.", capacity: 2);
-        courses.Add(crashCourse);
+        courseRepository.AddCourse(crashCourse);
 
         Console.WriteLine($">> Simulating a database crash while {studentB.Name} enrolls in {crashCourse.Name}...");
         enrollmentService.SimulateFailure = true;

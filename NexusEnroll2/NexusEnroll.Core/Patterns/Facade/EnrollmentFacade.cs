@@ -1,3 +1,6 @@
+using NexusEnroll.Core.Data.Admin;
+using NexusEnroll.Core.Data.Catalogue;
+using NexusEnroll.Core.Data.Student;
 using NexusEnroll.Core.Entities;
 using NexusEnroll.Core.Services;
 
@@ -6,26 +9,26 @@ namespace NexusEnroll.Core.Patterns.Facade;
 public class EnrollmentFacade
 {
     private readonly EnrollmentService _enrollmentService;
-    private readonly List<Student> _students;
-    private readonly List<Course> _courses;
-    private readonly List<Administrator> _administrators;
+    private readonly IStudentRepository _studentRepository;
+    private readonly ICourseRepository _courseRepository;
+    private readonly IAdminRepository _adminRepository;
 
     public EnrollmentFacade(
         EnrollmentService enrollmentService,
-        List<Student> students,
-        List<Course> courses,
-        List<Administrator> administrators)
+        IStudentRepository studentRepository,
+        ICourseRepository courseRepository,
+        IAdminRepository adminRepository)
     {
         _enrollmentService = enrollmentService;
-        _students = students;
-        _courses = courses;
-        _administrators = administrators;
+        _studentRepository = studentRepository;
+        _courseRepository = courseRepository;
+        _adminRepository = adminRepository;
     }
 
     public bool Enroll(string studentId, string courseId)
     {
-        Student? student = _students.FirstOrDefault(s => s.StudentId == studentId);
-        Course? course = _courses.FirstOrDefault(c => c.CourseId == courseId);
+        Student? student = _studentRepository.GetStudent(studentId);
+        Course? course = _courseRepository.GetCourse(courseId);
 
         if (student is null || course is null)
         {
@@ -37,8 +40,8 @@ public class EnrollmentFacade
 
     public bool DropCourse(string studentId, string courseId)
     {
-        Student? student = _students.FirstOrDefault(s => s.StudentId == studentId);
-        Course? course = _courses.FirstOrDefault(c => c.CourseId == courseId);
+        Student? student = _studentRepository.GetStudent(studentId);
+        Course? course = _courseRepository.GetCourse(courseId);
 
         if (student is null || course is null)
         {
@@ -51,9 +54,9 @@ public class EnrollmentFacade
 
     public bool AdminOverrideEnrollment(string adminId, string studentId, string courseId)
     {
-        Administrator? admin = _administrators.FirstOrDefault(a => a.AdminId == adminId);
-        Student? student = _students.FirstOrDefault(s => s.StudentId == studentId);
-        Course? course = _courses.FirstOrDefault(c => c.CourseId == courseId);
+        Administrator? admin = _adminRepository.GetAdmin(adminId);
+        Student? student = _studentRepository.GetStudent(studentId);
+        Course? course = _courseRepository.GetCourse(courseId);
 
         if (admin is null || student is null || course is null)
         {
@@ -66,5 +69,5 @@ public class EnrollmentFacade
     }
 
     public List<Course> BrowseCourses(Func<Course, bool> criteria) =>
-        _courses.Where(criteria).ToList();
+        _courseRepository.GetAllCourses().Where(criteria).ToList();
 }

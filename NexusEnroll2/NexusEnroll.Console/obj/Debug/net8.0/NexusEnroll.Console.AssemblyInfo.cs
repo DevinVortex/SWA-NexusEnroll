@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NexusEnroll.Console")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5e12dffb5e36a730ee6fd15414cffb6539f303c7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e47a0e317533438e6f9471ed55df426c97955157")]
 [assembly: System.Reflection.AssemblyProductAttribute("NexusEnroll.Console")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NexusEnroll.Console")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
