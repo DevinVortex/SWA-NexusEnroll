@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NexusEnroll - Enterprise SPA Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .fade-in { animation: fadeIn 0.25s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+        .toast-in { animation: toastIn 0.25s ease-out; }
+        @keyframes toastIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+        .pulse-dot { animation: pulse 1.6s ease-in-out infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800">
+
+    <!-- ================= HEADER ================= -->
+    <header class="bg-gradient-to-r from-indigo-800 to-blue-700 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-white/15 flex items-center justify-center text-2xl font-black">NX</div>
+                <div>
+                    <h1 class="text-xl font-bold leading-tight">NexusEnroll</h1>
+                    <p class="text-xs text-indigo-200">UCSC Software Architecture - Pattern Demonstration Suite</p>
+                </div>
+            </div>
+            <div id="statusBadge" class="flex items-center gap-2 bg-white/10 rounded-full px-3 py-1.5 text-sm">
+                <span class="pulse-dot w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
+                <span>Checking backend...</span>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <nav class="max-w-7xl mx-auto px-4 flex gap-1 overflow-x-auto">
+            <button data-tab="student" class="tab-btn flex items-center gap-2 px-4 py-3 text-sm font-semibold rounded-t-lg transition-all">🎓 Student Portal</button>
+            <button data-tab="faculty" class="tab-btn flex items-center gap-2 px-4 py-3 text-sm font-semibold rounded-t-lg transition-all">👨‍🏫 Faculty Portal</button>
+            <button data-tab="admin" class="tab-btn flex items-center gap-2 px-4 py-3 text-sm font-semibold rounded-t-lg transition-all">⚙️ Administrator Portal</button>
+            <button data-tab="events" class="tab-btn flex items-center gap-2 px-4 py-3 text-sm font-semibold rounded-t-lg transition-all">🔔 Live Event Bus (Observer)</button>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-6">
+        <!-- ================= STUDENT PORTAL ================= -->
+        <section id="tab-student" class="tab-panel space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-3 bg-white rounded-xl shadow p-4">
+                <div>
+                    <h2 class="text-lg font-bold">Student Portal</h2>
+                    <p class="text-sm text-slate-500">Browse the catalogue, manage enrollments and track progress.</p>
+                </div>
+                <label class="flex items-center gap-2 text-sm font-medium">
+                    Active Student
+                    <select id="studentSelect" class="border border-slate-300 rounded-lg px-3 py-2 bg-white text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
+                </label>
+            </div>
+
+            <!-- Course Catalogue Grid -->
+            <div class="bg-white rounded-xl shadow p-4">
+                <h3 class="font-bold mb-3">📚 Course Catalogue <span class="text-xs font-normal text-slate-400">(real-time seats - Strategy validation)</span></h3>
+                <div id="catalogueGrid" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-6">
+                <!-- Enrolled Courses & Schedule -->
+                <div class="bg-white rounded-xl shadow p-4">
+                    <h3 class="font-bold mb-3">🗓️ My Enrolled Courses & Schedule</h3>
+                    <div id="scheduleTable"></div>
+                </div>
+
+                <!-- Academic Progress -->
+                <div class="bg-white rounded-xl shadow p-4">
+                    <h3 class="font-bold mb-3">🎯 Academic Progress</h3>
+                    <div id="progressPanel"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= FACULTY PORTAL ================= -->
+        <section id="tab-faculty" class="tab-panel hidden space-y-6">
+            <div class="bg-white rounded-xl shadow p-4">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <h2 class="text-lg font-bold">Faculty Portal</h2>
+                        <p class="text-sm text-slate-500">View class rosters and submit grades (State pattern: Pending → Submitted).</p>
+                    </div>
+                    <label class="flex items-center gap-2 text-sm font-medium">
+                        Course
+                        <select id="facultyCourseSelect" class="border border-slate-300 rounded-lg px-3 py-2 bg-white text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
+                    </label>
+                </div>
+                <p class="mt-3 text-sm text-slate-600">Faculty: <span class="font-semibold">Dr. Perera (F001)</span> - CS Department</p>
+            </div>
+
+            <!-- Roster -->
+            <div class="bg-white rounded-xl shadow p-4">
+                <h3 class="font-bold mb-3">👥 Class Roster</h3>
+                <div id="rosterTable"></div>
+            </div>
+
+            <!-- Grade Submission -->
+            <div class="bg-white rounded-xl shadow p-4">
+                <h3 class="font-bold mb-3">🎓 Grade Submission <span class="text-xs font-normal text-slate-400">(State pattern lifecycle)</span></h3>
+                <div class="flex flex-wrap items-end gap-3">
+                    <label class="flex flex-col gap-1 text-sm font-medium">
+                        Student
+                        <select id="gradeStudentSelect" class="border border-slate-300 rounded-lg px-3 py-2 bg-white text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
+                    </label>
+                    <label class="flex flex-col gap-1 text-sm font-medium">
+                        Grade
+                        <select id="gradeSelect" class="border border-slate-300 rounded-lg px-3 py-2 bg-white text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option>A</option><option>B</option><option>C</option><option>F</option>
+                        </select>
+                    </label>
+                    <button id="gradeSubmitBtn" class="px-4 py-2 rounded-lg bg-indigo-700 text-white text-sm font-semibold hover:bg-indigo-800 disabled:opacity-50">Submit Final Grade</button>
+                </div>
+                <p id="gradeStateInfo" class="mt-3 text-xs text-slate-400">Select a course above, then a student. Submitting walks the grade state machine Pending → Submitted.</p>
+            </div>
+        </section>
+
+        <!-- ================= ADMIN PORTAL ================= -->
+        <section id="tab-admin" class="tab-panel hidden space-y-6">
+            <div class="bg-white rounded-xl shadow p-4">
+                <h2 class="text-lg font-bold mb-1">⚙️ Administrator Portal</h2>
+                <p class="text-sm text-slate-500 mb-4">Force-enrollment with rule override and capacity analytics reporting.</p>
+
+                <!-- Force Add / Override -->
+                <div class="border border-slate-200 rounded-lg p-4 bg-slate-50">
+                    <h3 class="font-bold text-sm mb-3">🛡️ Rule Override / Force-Enrollment</h3>
+                    <div class="flex flex-wrap items-end gap-3">
+                        <label class="flex flex-col gap-1 text-sm font-medium">
+                            Admin ID
+                            <input id="overrideAdminId" type="text" value="ADM01" class="border border-slate-300 rounded-lg px-3 py-2 bg-white text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                        </label>
+                        <label class="flex flex-col gap-1 text-sm font-medium">
+                            Student ID
+                            <input id="overrideStudentId" type="text" value="S003" class="border border-slate-300 rounded-lg px-3 py-2 bg-white text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                        </label>
+                        <label class="flex flex-col gap-1 text-sm font-medium">
+                            Course ID
+                            <input id="overrideCourseId" type="text" value="CS201" class="border border-slate-300 rounded-lg px-3 py-2 bg-white text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                        </label>
+                        <button id="overrideBtn" class="px-4 py-2 rounded-lg bg-emerald-700 text-white text-sm font-semibold hover:bg-emerald-800 disabled:opacity-50">Force-Enroll (Override)</button>
+                    </div>
+                    <p class="mt-2 text-xs text-slate-400">Bypasses Capacity / Prerequisite / Time-conflict strategies (e.g. force-add S003 into full CS201).</p>
+                </div>
+            </div>
+
+            <!-- Capacity Analytics -->
+            <div class="bg-white rounded-xl shadow p-4">
+                <h3 class="font-bold mb-1">📊 Capacity & Analytics Report</h3>
+                <p class="text-sm text-slate-500 mb-3">Courses at or above 90% occupancy are flagged with red alerts.</p>
+                <div id="capacityTable"></div>
+            </div>
+        </section>
+
+        <!-- ================= LIVE EVENT BUS ================= -->
+        <section id="tab-events" class="tab-panel hidden space-y-6">
+            <div class="bg-white rounded-xl shadow p-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-lg font-bold">🔔 Live Event Bus</h2>
+                        <p class="text-sm text-slate-500">Decoupled Observer-pattern notifications (Advisor & Waitlist notifiers).</p>
+                    </div>
+                    <span class="text-xs text-slate-400">Polling /api/notifications every 3s</span>
+                </div>
+                <div id="eventFeed" class="mt-4 space-y-2 max-h-[60vh] overflow-y-auto pr-2"></div>
+                <div id="eventEmpty" class="mt-4 text-center text-sm text-slate-400 py-8">
+                    No events yet. Enroll, drop or override a course to see notifications stream in.
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Toast container -->
+    <div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-2 w-80"></div>
+
+    <script>
+        // ============================================================
+        // STATE
+        // ============================================================
+        const state = {
+            students: ["S001", "S002", "S003"],
+            currentStudent: "S001",
+            courses: [],
+            facultyCourseId: "CS101",
+            seenEvents: new Set()
+        };
+
+        const $ = (id) => document.getElementById(id);
+
+        // ============================================================
+        // TOASTS
+        // ============================================================
+        function showToast(message, type = "info") {
+            const colors = {
+                success: "bg-emerald-600",
+                error: "bg-red-600",
+                info: "bg-slate-700"
+            };
+            const el = document.createElement("div");
+            el.className = `toast-in ${colors[type] || colors.info} text-white rounded-lg shadow-lg px-4 py-3 text-sm font-medium`;
+            el.textContent = message;
+            $("toastContainer").appendChild(el);
+            setTimeout(() => {
+                el.style.opacity = "0";
+                el.style.transition = "opacity 0.4s";
+                setTimeout(() => el.remove(), 400);
+            }, 4200);
+        }
+
+        // ============================================================
+        // API HELPER
+        // ============================================================
+        async function api(path, options = {}) {
+            const response = await fetch(path, {
+                headers: { "Content-Type": "application/json" },
+                ...options
+            });
+            const data = await response.json().catch(() => ({}));
+            return { ok: response.ok, status: response.status, data };
+        }
+
+        // ============================================================
+        // TABS
+        // ============================================================
+        document.querySelectorAll(".tab-btn").forEach((btn) => {
+            btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+        });
+
+        function switchTab(tab) {
+            document.querySelectorAll(".tab-btn").forEach((b) => {
+                const active = b.dataset.tab === tab;
+                b.classList.toggle("bg-white", active);
+                b.classList.toggle("text-indigo-800", active);
+                b.classList.toggle("text-white", !active);
+            });
+            document.querySelectorAll(".tab-panel").forEach((p) => p.classList.add("hidden"));
+            $("tab-" + tab).classList.remove("hidden");
+            if (tab === "faculty") loadRoster();
+            if (tab === "admin") loadCapacityReport();
+            if (tab === "events") loadNotifications(true);
+        }
+
+        // ============================================================
+        // STUDENT PORTAL
+        // ============================================================
+        function renderStudentSelect() {
+            $("studentSelect").innerHTML = state.students
+                .map((id) => `<option value="${id}">${id}</option>`)
+                .join("");
+        }
+
+        $("studentSelect").addEventListener("change", (e) => {
+            state.currentStudent = e.target.value;
+            loadStudent();
+        });
+
+        function renderCatalogue(courses) {
+            const grid = $("catalogueGrid");
+            grid.innerHTML = "";
+            courses.forEach((c) => {
+                const available = c.availableSeats;
+                const isEnrolled = c.enrolledStudents || false;
+                const seatColor = available <= 0
+                    ? "bg-red-100 text-red-700 border-red-300"
+                    : available <= 5
+                        ? "bg-amber-100 text-amber-700 border-amber-300"
+                        : "bg-emerald-100 text-emerald-700 border-emerald-300";
+
+                const card = document.createElement("div");
+                card.className = "fade-in border border-slate-200 rounded-xl p-4 flex flex-col gap-2 hover:shadow-md transition-shadow";
+                card.innerHTML = `
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <p class="font-bold text-slate-900">${esc(c.name)}</p>
+                            <p class="text-xs font-mono text-slate-400">${esc(c.courseId)} · ${c.credits} credits</p>
+                        </div>
+                        <span class="shrink-0 text-xs font-bold border rounded-full px-2 py-1 ${seatColor}">${available} / ${c.capacity} seats</span>
+                    </div>
+                    <p class="text-sm text-slate-500 line-clamp-2">${esc(c.description || "")}</p>
+                    <div class="text-xs text-slate-600 space-y-0.5">
+                        ${c.schedule
+                            ? `<p>🕒 ${esc(c.schedule.timeSlot)} · ${esc(c.schedule.room || "")} · ${esc(c.schedule.day || "")}</p>`
+                            : "<p>🕒 TBD</p>"}
+                        ${c.instructor ? `<p>👨‍🏫 ${esc(c.instructor)}</p>` : ""}
+                        ${c.prerequisites.length ? `<p>📌 Prereqs: <span class="font-mono">${esc(c.prerequisites.join(", "))}</span></p>` : "<p class='text-emerald-600'>📌 No prerequisites</p>"}
+                    </div>
+                    <button class="enroll-btn mt-auto w-full rounded-lg px-3 py-2 text-sm font-semibold transition-colors ${available > 0
+                            ? "bg-indigo-700 text-white hover:bg-indigo-800"
+                            : "bg-slate-200 text-slate-400 cursor-not-allowed"}"
+                        ${available > 0 ? "" : "disabled"}>
+                        ${available > 0 ? "Enroll" : "Full"}
+                    </button>
+                `;
+                card.querySelector(".enroll-btn").addEventListener("click", () => enroll(c.courseId));
+                grid.appendChild(card);
+            });
+        }
+
+        function renderSchedule(details) {
+            const container = $("scheduleTable");
+            const rows = details.schedule || [];
+            if (!rows.length) {
+                container.innerHTML = `<p class="text-sm text-slate-400 py-6 text-center">No enrolled courses yet.</p>`;
+                return;
+            }
+            container.innerHTML = `
+                <table class="w-full text-sm">
+                    <thead><tr class="text-left text-slate-400 border-b">
+                        <th class="py-2 pr-2">Course</th><th class="py-2 pr-2">Schedule</th><th class="py-2 pr-2">Room</th><th class="py-2"></th>
+                    </tr></thead>
+                    <tbody>${rows.map((r) => `
+                        <tr class="border-b border-slate-100">
+                            <td class="py-2 pr-2 font-medium">${esc(r.name)}<span class="block font-mono text-xs text-slate-400">${esc(r.courseId)}</span></td>
+                            <td class="py-2 pr-2 text-slate-600">${esc(r.timeSlot || (r.day + " " + r.start + "-" + r.end))}</td>
+                            <td class="py-2 pr-2 text-slate-600">${esc(r.room || "-")}</td>
+                            <td class="py-2 text-right"><button class="drop-btn text-red-600 hover:text-red-800 text-xs font-bold" data-course="${esc(r.courseId)}">Drop</button></td>
+                        </tr>`).join("")}
+                    </tbody>
+                </table>`;
+            container.querySelectorAll(".drop-btn").forEach((btn) =>
+                btn.addEventListener("click", () => drop(btn.dataset.course)));
+        }
+
+        function renderProgress(details) {
+            const completed = details.completedCourses || [];
+            const progress = details.progress || {};
+            $("progressPanel").innerHTML = `
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div class="bg-indigo-50 rounded-lg p-3 text-center">
+                        <p class="text-2xl font-black text-indigo-700">${progress.completed ?? 0}</p>
+                        <p class="text-xs text-slate-500">Courses Completed</p>
+                    </div>
+                    <div class="bg-emerald-50 rounded-lg p-3 text-center">
+                        <p class="text-2xl font-black text-emerald-700">${progress.totalCredits ?? 0}</p>
+                        <p class="text-xs text-slate-500">Credits Earned</p>
+                    </div>
+                </div>
+                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wide mb-2">Completed Courses</h4>
+                ${completed.length
+                    ? `<ul class="space-y-1 text-sm">${completed.map((c) => `
+                        <li class="flex justify-between border-b border-slate-100 py-1">
+                            <span>${esc(c.name)} <span class="font-mono text-xs text-slate-400">${esc(c.courseId)}</span></span>
+                            <span class="text-emerald-600 font-semibold">${c.credits} cr</span>
+                        </li>`).join("")}</ul>`
+                    : `<p class="text-sm text-slate-400">No completed courses.</p>`}`;
+        }
+
+        async function loadCatalogue() {
+            const { ok, data } = await api("/api/catalogue");
+            if (!ok) return;
+            state.courses = data;
+            renderCatalogue(data);
+        }
+
+        async function loadStudent() {
+            const { ok, data } = await api(`/api/students/${state.currentStudent}/details`);
+            if (!ok) {
+                showToast(data.message || "Failed to load student details", "error");
+                return;
+            }
+            renderSchedule(data);
+            renderProgress(data);
+        }
+
+        async function enroll(courseId) {
+            const { ok, data } = await api("/api/enroll", {
+                method: "POST",
+                body: JSON.stringify({ studentId: state.currentStudent, courseId })
+            });
+            if (ok) {
+                showToast(data.message || "Enrollment successful", "success");
+            } else {
+                // 400 Bad Request -> Strategy pattern rejection (Capacity/Prerequisite/Time conflict).
+                showToast(data.error || data.message || "Enrollment failed. A validation rule rejected the request.", "error");
+            }
+            await refreshStudentView();
+        }
+
+        async function drop(courseId) {
+            const { ok, data } = await api("/api/drop", {
+                method: "POST",
+                body: JSON.stringify({ studentId: state.currentStudent, courseId })
+            });
+            if (ok) {
+                showToast(data.message || "Drop successful", "success");
+            } else {
+                showToast(data.error || data.message || "Drop failed.", "error");
+            }
+            await refreshStudentView();
+        }
+
+        async function refreshStudentView() {
+            // Instantly re-fetch the Catalogue (available seats) and the Student
+            // Schedule (enrolled/dropped courses) so the UI stays in sync.
+            await Promise.all([loadCatalogue(), loadStudent()]);
+            loadNotifications();
+        }
+
+        // ============================================================
+        // FACULTY PORTAL
+        // ============================================================
+        function renderFacultyCourseSelect() {
+            const select = $("facultyCourseSelect");
+            select.innerHTML = state.courses
+                .map((c) => `<option value="${esc(c.courseId)}">${esc(c.courseId)} - ${esc(c.name)}</option>`)
+                .join("");
+            select.value = state.facultyCourseId;
+        }
+
+        $("facultyCourseSelect").addEventListener("change", (e) => {
+            state.facultyCourseId = e.target.value;
+            loadRoster();
+        });
+
+        function renderRoster(data) {
+            const roster = data.roster || [];
+            const container = $("rosterTable");
+            if (!roster.length) {
+                container.innerHTML = `<p class="text-sm text-slate-400 py-6 text-center">No students enrolled in this course.</p>`;
+                return;
+            }
+            container.innerHTML = `
+                <p class="text-xs text-slate-400 mb-2">${esc(data.courseId)} · ${data.enrolledCount} / ${data.capacity} enrolled</p>
+                <table class="w-full text-sm">
+                    <thead><tr class="text-left text-slate-400 border-b">
+                        <th class="py-2 pr-2">Student ID</th><th class="py-2 pr-2">Name</th><th class="py-2 pr-2">Grade Status</th>
+                    </tr></thead>
+                    <tbody>${roster.map((s) => `
+                        <tr class="border-b border-slate-100">
+                            <td class="py-2 pr-2 font-mono text-xs font-semibold">${esc(s.studentId)}</td>
+                            <td class="py-2 pr-2">${esc(s.name)}</td>
+                            <td class="py-2">${gradeBadge(s.gradeStatus)}</td>
+                        </tr>`).join("")}
+                    </tbody>
+                </table>`;
+            // Populate grade submission student selector
+            const gradeSelect = $("gradeStudentSelect");
+            gradeSelect.innerHTML = roster
+                .map((s) => `<option value="${esc(s.studentId)}">${esc(s.studentId)} - ${esc(s.name)}</option>`)
+                .join("");
+            $("gradeStateInfo").textContent =
+                "Selected course: " + data.courseId + ". Pick a student and grade, then submit to walk the State machine Pending → Submitted.";
+        }
+
+        function gradeBadge(status) {
+            const friendly = status === "SubmittedState" ? "Submitted" : "Pending";
+            const color = status === "SubmittedState"
+                ? "bg-emerald-100 text-emerald-700 border-emerald-300"
+                : "bg-amber-100 text-amber-700 border-amber-300";
+            return `<span class="inline-block border rounded-full px-2 py-0.5 text-xs font-bold ${color}">${friendly}</span>`;
+        }
+
+        async function loadRoster() {
+            if (!state.courses.length) await loadCatalogue();
+            renderFacultyCourseSelect();
+            const courseId = $("facultyCourseSelect").value;
+            state.facultyCourseId = courseId;
+            const { ok, data } = await api(`/api/faculty/F001/roster/${encodeURIComponent(courseId)}`);
+            if (!ok) {
+                $("rosterTable").innerHTML = `<p class="text-sm text-red-500 py-4">${esc(data.message || "Failed to load roster.")}</p>`;
+                return;
+            }
+            renderRoster(data);
+        }
+
+        $("gradeSubmitBtn").addEventListener("click", async () => {
+            const courseId = state.facultyCourseId;
+            const studentId = $("gradeStudentSelect").value;
+            const grade = $("gradeSelect").value;
+            const { ok, data } = await api("/api/faculty/grades/submit", {
+                method: "POST",
+                body: JSON.stringify({ courseId, studentId, grade })
+            });
+            showToast(data.message || "Grade submission processed", ok ? "success" : "error");
+            await loadRoster();
+            loadNotifications();
+        });
+
+        // ============================================================
+        // ADMIN PORTAL
+        // ============================================================
+        $("overrideBtn").addEventListener("click", async () => {
+            const adminId = $("overrideAdminId").value.trim();
+            const studentId = $("overrideStudentId").value.trim();
+            const courseId = $("overrideCourseId").value.trim();
+            if (!adminId || !studentId || !courseId) {
+                showToast("Admin ID, Student ID and Course ID are required.", "error");
+                return;
+            }
+            const { ok, data } = await api("/api/admin/override", {
+                method: "POST",
+                body: JSON.stringify({ adminId, studentId, courseId })
+            });
+            showToast(data.message || "Override processed", ok ? "success" : "error");
+            await Promise.all([loadCapacityReport(), loadCatalogue(), loadStudent()]);
+            loadNotifications();
+        });
+
+        function renderCapacityReport(report) {
+            const rows = report.courses || [];
+            const container = $("capacityTable");
+            if (!rows.length) {
+                container.innerHTML = `<p class="text-sm text-slate-400 py-6 text-center">No courses.</p>`;
+                return;
+            }
+            // Compute occupancy on the client: (enrolled / capacity) * 100
+            const enriched = rows.map((r) => {
+                const pct = r.capacity > 0 ? (r.enrolledCount / r.capacity) * 100 : 0;
+                return {
+                    ...r,
+                    occupancyPercent: Math.round(pct * 10) / 10,
+                    isOver90Percent: pct > 90
+                };
+            });
+            container.innerHTML = `
+                <table class="w-full text-sm">
+                    <thead><tr class="text-left text-slate-400 border-b">
+                        <th class="py-2 pr-2">Course</th><th class="py-2 pr-2">Enrolled</th><th class="py-2 pr-2">Capacity</th>
+                        <th class="py-2 pr-2 w-1/3">Occupancy</th><th class="py-2">Status</th>
+                    </tr></thead>
+                    <tbody>${enriched.map((r) => {
+                        const pct = Math.min(r.occupancyPercent, 100);
+                        const barColor = r.isOver90Percent ? "bg-red-500" : (r.occupancyPercent >= 75 ? "bg-amber-500" : "bg-emerald-500");
+                        const rowClass = r.isOver90Percent ? "bg-red-50 border-red-200" : "";
+                        return `
+                        <tr class="border-b border-slate-100 ${rowClass}">
+                            <td class="py-2 pr-2 font-medium">${esc(r.name)}<span class="block font-mono text-xs text-slate-400">${esc(r.courseId)}</span></td>
+                            <td class="py-2 pr-2 ${r.isOver90Percent ? "text-red-600 font-bold" : ""}">${r.enrolledCount}</td>
+                            <td class="py-2 pr-2">${r.capacity}</td>
+                            <td class="py-2 pr-2">
+                                <div class="flex items-center gap-2">
+                                    <div class="flex-1 h-2.5 bg-slate-200 rounded-full overflow-hidden">
+                                        <div class="h-full ${barColor} rounded-full" style="width:${pct}%"></div>
+                                    </div>
+                                    <span class="text-xs font-semibold w-12 text-right">${r.occupancyPercent}%</span>
+                                </div>
+                            </td>
+                            <td class="py-2">${r.isOver90Percent
+                                ? '<span class="inline-block border border-red-300 bg-red-100 text-red-700 rounded-full px-2 py-0.5 text-xs font-bold">🚨 ALERT >90%</span>'
+                                : `<span class="inline-block border border-slate-200 bg-slate-100 text-slate-600 rounded-full px-2 py-0.5 text-xs font-semibold">${esc(r.status || "OK")}</span>`}</td>
+                        </tr>`;
+                    }).join("")}
+                    </tbody>
+                </table>`;
+        }
+
+        async function loadCapacityReport() {
+            const { ok, data } = await api("/api/admin/reports/capacity");
+            if (!ok) return;
+            renderCapacityReport(data);
+        }
+
+        // ============================================================
+        // LIVE EVENT BUS
+        // ============================================================
+        function renderEventFeed(entries) {
+            const feed = $("eventFeed");
+            const fresh = [];
+            entries.forEach((e) => {
+                const key = e.timestamp + "|" + e.message;
+                if (!state.seenEvents.has(key)) {
+                    state.seenEvents.add(key);
+                    fresh.push(e);
+                }
+            });
+            if (fresh.length) {
+                fresh.forEach((e) => {
+                    const el = document.createElement("div");
+                    el.className = "fade-in flex items-start gap-3 border border-slate-200 rounded-lg px-3 py-2 bg-slate-50 text-sm";
+                    el.innerHTML = `
+                        <span class="mt-0.5 w-2 h-2 rounded-full bg-blue-500 pulse-dot shrink-0"></span>
+                        <div>
+                            <p class="font-mono text-xs text-slate-400">${esc(e.timestamp)}</p>
+                            <p class="text-slate-700">${esc(e.message)}</p>
+                        </div>`;
+                    feed.prepend(el);
+                });
+                // Cap the DOM feed
+                while (feed.children.length > 50) feed.removeChild(feed.lastChild);
+            }
+            $("eventEmpty").style.display = feed.children.length ? "none" : "block";
+        }
+
+        async function loadNotifications(force = false) {
+            const { ok, data } = await api("/api/notifications");
+            if (ok) renderEventFeed(data);
+        }
+
+        // ============================================================
+        // HELPERS & INIT
+        // ============================================================
+        function esc(value) {
+            const div = document.createElement("div");
+            div.textContent = value == null ? "" : String(value);
+            return div.innerHTML;
+        }
+
+        function setBackendStatus(online) {
+            const badge = $("statusBadge");
+            if (online) {
+                badge.innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span><span class="font-semibold">Minimal API Backend Online</span>';
+            } else {
+                badge.innerHTML = '<span class="w-2.5 h-2.5 rounded-full bg-red-400"></span><span class="font-semibold">Backend Offline</span>';
+            }
+        }
+
+        async function init() {
+            renderStudentSelect();
+            switchTab("student");
+
+            try {
+                await loadCatalogue();
+                await loadStudent();
+                setBackendStatus(true);
+            } catch {
+                setBackendStatus(false);
+                showToast("Cannot reach the Minimal API backend.", "error");
+            }
+
+            // Live event polling (Observer event bus).
+            setInterval(() => loadNotifications(), 3000);
+        }
+
+        init();
+    </script>
+</body>
+</html>

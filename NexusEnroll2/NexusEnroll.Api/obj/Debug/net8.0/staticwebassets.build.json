@@ -1,0 +1,39 @@
+{
+  "Version": 1,
+  "Hash": "kCGOoLTL2eCnXMfAJ5eOrb6bZilSq80VHpnrKnM4UuI=",
+  "Source": "NexusEnroll.Api",
+  "BasePath": "_content/NexusEnroll.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "NexusEnroll.Api/wwwroot",
+      "Source": "NexusEnroll.Api",
+      "ContentRoot": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Api/wwwroot/",
+      "BasePath": "_content/NexusEnroll.Api",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Api/wwwroot/index.html",
+      "SourceId": "NexusEnroll.Api",
+      "SourceType": "Discovered",
+      "ContentRoot": "/home/devin-gamage/Desktop/SWA-NexusEnroll/NexusEnroll2/NexusEnroll.Api/wwwroot/",
+      "BasePath": "_content/NexusEnroll.Api",
+      "RelativePath": "index.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/index.html"
+    }
+  ]
+}
