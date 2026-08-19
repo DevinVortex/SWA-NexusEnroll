@@ -1,6 +1,6 @@
 # NexusEnroll - University Course Enrollment System
 
-NexusEnroll is a modernized, scalable University Course Enrollment System built as a proof-of-concept (POC) for the Software Architecture (SCS 2303) module[cite: 2]. 
+NexusEnroll is a modernized, scalable University Course Enrollment System built as a proof-of-concept (POC) for the Software Architecture (SCS 2303) module. 
 
 Designed to replace a legacy monolith, this application implements a **Modular Monolith** architecture to simulate a **Microservices ecosystem**. It enforces strict domain decoupling and utilizes a Database-per-Service pattern via in-memory repositories.
 
